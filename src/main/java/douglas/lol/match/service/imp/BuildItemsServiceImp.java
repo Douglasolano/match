@@ -10,6 +10,7 @@ import douglas.lol.match.entity.BuildItems;
 import douglas.lol.match.entity.Item;
 import douglas.lol.match.entityDTO.BuildItemsDTO;
 import douglas.lol.match.entityDTO.ItemDTO;
+import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.BuildItemsRepository;
 import douglas.lol.match.repository.BuildRepository;
 import douglas.lol.match.repository.ItemRepository;
@@ -39,13 +40,11 @@ public class BuildItemsServiceImp implements BuildItemsService{
 			
 			Build realBuild = buildRepo
 					.findById(dto.getBuildId())
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-																   "Build not found: " + dto.getBuildId()));
+					.orElseThrow(() -> new BussinesRuleException("Build not found: " + dto.getBuildId()));
 			
 			Item realItem = itemRepo
 					.findById(bd.getItemID())
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-																   "Item not found: " + bd.getItemID()));
+					.orElseThrow(() -> new BussinesRuleException("Item not found: " + bd.getItemID()));
 			
 			build.setBuildId(realBuild);
 			build.setItemId(realItem);

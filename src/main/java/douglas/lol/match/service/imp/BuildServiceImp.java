@@ -14,6 +14,7 @@ import douglas.lol.match.entity.Item;
 import douglas.lol.match.entityDTO.BuildDTO;
 import douglas.lol.match.entityDTO.BuildItemsDTO;
 import douglas.lol.match.entityDTO.ItemDTO;
+import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.BuildRepository;
 import douglas.lol.match.repository.ChampionRepository;
 import douglas.lol.match.repository.ItemRepository;
@@ -45,8 +46,8 @@ public class BuildServiceImp implements BuildService{
 		
 		Champion champ = champRepo
 				.findById(buildDTO.getChampion())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-															   "Champion not found: " + buildDTO.getChampion()));
+				.orElseThrow(() -> new BussinesRuleException("Champion not found: " + buildDTO.getChampion()));
+		
 		Build build = new Build();
 		build.setName(buildDTO.getName());
 		build.setChampion(champ);
@@ -67,7 +68,7 @@ public class BuildServiceImp implements BuildService{
 	private List<Item> itemsConvert(Build build, List<ItemDTO> items) {
 		
 		if(items.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Need one item.");
+			throw new BussinesRuleException("Need one item.");
 		}
 		
 		return items
@@ -75,7 +76,7 @@ public class BuildServiceImp implements BuildService{
 				.map(dto -> {
 					Integer itemId = dto.getItemID();
 					Item item = itemRepo.findById(itemId)
-							.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid item code: " + itemId));
+							.orElseThrow(() -> new BussinesRuleException("Invalid item code: " + itemId));
 					
 				return item;
 		}).collect(Collectors.toList());

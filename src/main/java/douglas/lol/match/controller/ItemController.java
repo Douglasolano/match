@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import douglas.lol.match.entity.Item;
+import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.ItemRepository;
 
 @RestController
@@ -55,7 +56,7 @@ public class ItemController {
 		
 		itemRepo.findById(id)
 		.map(i -> {itemRepo.delete(i); return Void.class;})
-		.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Item not found in database."));
+		.orElseThrow(() -> new BussinesRuleException("Item not found in database."));
 	}
 	
 	@PutMapping("/{id}")
@@ -65,6 +66,6 @@ public class ItemController {
 		
 		itemRepo.findById(id)
 		.map(i -> {item.setId(i.getId()); itemRepo.save(item); return i;})
-		.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Item not found in database."));
+		.orElseThrow(() -> new BussinesRuleException("Item not found in database."));
 	}
 }

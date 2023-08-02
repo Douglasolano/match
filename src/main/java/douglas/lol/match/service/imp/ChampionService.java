@@ -1,12 +1,11 @@
 package douglas.lol.match.service.imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import douglas.lol.match.entity.Champion;
 import douglas.lol.match.entity.Item;
+import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.ChampionRepository;
 
 @Service
@@ -18,8 +17,7 @@ public class ChampionService {
 	public void saveItemsStatics(Item item, Integer idChamp) {
 		
 		Champion champion = champRepo.findById(idChamp)
-									 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-											 							"Champion not found: " + idChamp));
+									 .orElseThrow(() -> new BussinesRuleException("Champion not found: " + idChamp));
 		
 		if(!(item.getArmor() == null)) {
 			champion.setArmor(champion.getArmor() + item.getArmor());

@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import douglas.lol.match.entity.Build;
 import douglas.lol.match.entityDTO.BuildDTO;
+import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.BuildRepository;
 import douglas.lol.match.repository.ChampionRepository;
 import douglas.lol.match.service.BuildItemsService;
@@ -66,6 +67,6 @@ public class BuildController {
 		
 		buildRepo.findById(id)
 		.map(b -> {buildRepo.delete(b); return Void.class;})
-		.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Champion not found in database."));
+		.orElseThrow(() -> new BussinesRuleException("Champion not found in database."));
 	}
 }
