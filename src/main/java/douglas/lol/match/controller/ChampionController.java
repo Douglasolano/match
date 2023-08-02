@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import douglas.lol.match.entity.Champion;
+import douglas.lol.match.entity.Item;
+import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.ChampionRepository;
 
 @RestController
@@ -29,6 +31,15 @@ public class ChampionController {
 	@GetMapping
 	public List<Champion> getChampions() {
 		return championRepo.findAll();
+	}
+	
+	@GetMapping(value = "/id/{id}")
+	public Champion getChampionById(@PathVariable("id") Integer id) {
+		
+		return championRepo.findById(id)
+						.map(b -> {return b;})
+						.orElseThrow(() -> new BussinesRuleException("Champion id not found in database: " + id));
+		
 	}
 	
 	@GetMapping(value = "/{name}")

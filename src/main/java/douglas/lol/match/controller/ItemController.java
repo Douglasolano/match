@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import douglas.lol.match.entity.Build;
 import douglas.lol.match.entity.Item;
 import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.ItemRepository;
@@ -31,6 +32,15 @@ public class ItemController {
 	@GetMapping
 	public List<Item> getItems() {
 		return itemRepo.findAll();
+	}
+	
+	@GetMapping(value = "/id/{id}")
+	public Item getItemById(@PathVariable("id") Integer id) {
+		
+		return itemRepo.findById(id)
+						.map(b -> {return b;})
+						.orElseThrow(() -> new BussinesRuleException("Item id not found in database: " + id));
+		
 	}
 	
 	@GetMapping(value = "/{name}")

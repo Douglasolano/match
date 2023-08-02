@@ -1,6 +1,7 @@
 package douglas.lol.match.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import douglas.lol.match.entity.Build;
 import douglas.lol.match.entityDTO.BuildDTO;
@@ -44,6 +44,15 @@ public class BuildController {
 		return buildRepo.findAll();
 	}
 	
+	@GetMapping(value = "/id/{id}")
+	public Build getBuildById(@PathVariable("id") Integer id) {
+		
+		return buildRepo.findById(id)
+						.map(b -> {return b;})
+						.orElseThrow(() -> new BussinesRuleException("Build id not found in database: " + id));
+		
+	}
+	
 	@GetMapping(value = "/{name}")
 	public ResponseEntity getBuildByName(@PathVariable("name") String name) {
 		
@@ -52,7 +61,7 @@ public class BuildController {
 		if(build != null) {
 			return ResponseEntity.ok(build);
 		}
-		return ResponseEntity.notFound().build();
+		throw new BussinesRuleException("Build name not found in database: " + name);
 	}
 	
 	@PostMapping(value = "/newBuild")
