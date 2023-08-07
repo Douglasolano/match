@@ -5,4 +5,6 @@ import douglas.lol.match.entityDTO.BuildItemsDTO;
 
 public interface BuildItemsService {
 	BuildItems saveBuildItems(BuildItemsDTO dto);
+
+	void deleteBuildItems(Integer id);
 }

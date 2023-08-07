@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "champion")
@@ -19,9 +20,11 @@ public class Champion {
 	private Integer id;
 	
 	@Column(name = "name")
+	@NotEmpty(message = "Empty name is not allowed.")
 	private String name;
 	
 	@Column(name = "life")
+	@NotEmpty(message = "Empty life is not allowed.")
 	private Integer life;   
 	
 	@Column(name = "mana")
@@ -29,16 +32,20 @@ public class Champion {
 	private Integer mana;
 	
 	@Column(name = "physical_damage")
+	@NotEmpty(message = "Empty physicalDamage is not allowed.")
 	private Integer physicalDamage;
 	
 	@Column(name = "habilit_power")
+	@NotEmpty(message = "Empty habilitPower is not allowed.")
 	@JsonInclude(Include. NON_NULL)
 	private Integer habilitPower;
 	
 	@Column(name = "armor")
+	@NotEmpty(message = "Empty armor is not allowed.")
 	private Integer armor;
 	
 	@Column(name = "magic_resist")
+	@NotEmpty(message = "Empty magicResist is not allowed.")
 	private Integer magicResist;
 	
 	@Column(name = "life_steal")
@@ -50,6 +57,7 @@ public class Champion {
 	private Integer critic;
 	
 	@Column(name = "attack_speed")
+	@NotEmpty(message = "Empty attackSpeed is not allowed.")
 	private Double attackSpeed;
 
 	public Champion() {

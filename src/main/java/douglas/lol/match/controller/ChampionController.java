@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import douglas.lol.match.entity.Champion;
-import douglas.lol.match.entity.Item;
 import douglas.lol.match.exception.BussinesRuleException;
 import douglas.lol.match.repository.ChampionRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/matchAPI/champion")
@@ -50,12 +49,12 @@ public class ChampionController {
 		if(champion != null) {
 			return ResponseEntity.ok(champion);
 		}	
-		return ResponseEntity.notFound().build();
+		throw new BussinesRuleException("Champion name not found in database: " + name);
 	}
 	
 	@PostMapping(value = "/newChamp")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Champion saveChampion(@RequestBody Champion champion) {
+	public Champion saveChampion(@RequestBody @Valid Champion champion) {
 		
 		return championRepo.save(champion);
 	}
@@ -67,7 +66,7 @@ public class ChampionController {
 		championRepo.findById(id)
 		.map(champion -> {championRepo.delete(champion);
 						  return Void.class;})
-						.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Champion not found in database."));
+						.orElseThrow(() -> new BussinesRuleException("Champion not found in database."));
 	}
 	
 	@PutMapping("/{id}")
@@ -77,6 +76,6 @@ public class ChampionController {
 		
 		championRepo.findById(id)
 		.map( c -> {champion.setId(c.getId()); championRepo.save(champion); return c;})
-		.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Champion not found in database."));
+		.orElseThrow(() -> new BussinesRuleException("Champion not found in database."));
 	}
 }

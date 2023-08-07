@@ -51,7 +51,7 @@ public class ItemController {
 		if(item != null) {
 			return ResponseEntity.ok(item);
 		}
-		return ResponseEntity.notFound().build();
+		throw new BussinesRuleException("Item name not found in database: " + name);
 	}
 
 	@PostMapping(value = "/newItem")

@@ -7,4 +7,5 @@ import douglas.lol.match.entity.Build;
 public interface BuildRepository extends JpaRepository<Build, Integer>{
 	
 	public Build findByName(String name);
+	
 }

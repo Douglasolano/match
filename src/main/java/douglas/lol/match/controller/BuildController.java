@@ -1,7 +1,6 @@
 package douglas.lol.match.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,9 +72,6 @@ public class BuildController {
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteBuild(@PathVariable Integer id) {
-		
-		buildRepo.findById(id)
-		.map(b -> {buildRepo.delete(b); return Void.class;})
-		.orElseThrow(() -> new BussinesRuleException("Champion not found in database."));
+		service.deleteBuild(id);
 	}
 }

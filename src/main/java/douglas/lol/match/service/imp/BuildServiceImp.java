@@ -1,12 +1,11 @@
 package douglas.lol.match.service.imp;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import douglas.lol.match.entity.Build;
 import douglas.lol.match.entity.Champion;
@@ -42,7 +41,7 @@ public class BuildServiceImp implements BuildService{
 	
 	@Override
 	@Transactional
-	public Build saveBuild(BuildDTO buildDTO) {
+	public void saveBuild(BuildDTO buildDTO) {
 		
 		Champion champ = champRepo
 				.findById(buildDTO.getChampion())
@@ -61,8 +60,6 @@ public class BuildServiceImp implements BuildService{
 		for (Item item : items) {
 			championService.saveItemsStatics(item,buildDTO.getChampion());
 		}
-		
-		return build;
 	}
 
 	private List<Item> itemsConvert(Build build, List<ItemDTO> items) {
@@ -80,5 +77,18 @@ public class BuildServiceImp implements BuildService{
 					
 				return item;
 		}).collect(Collectors.toList());
+	}
+
+	@Override
+	public void deleteBuild(Integer id) {
+		
+		Optional<Build> optionalBuild = buildRepo.findById(id);
+		
+		if(!optionalBuild.isPresent()) {
+			throw new BussinesRuleException("Build id not found in database: " + id);
+		}
+		
+		buildItemsService.deleteBuildItems(id);
+		buildRepo.deleteById(id);
 	}
 }
